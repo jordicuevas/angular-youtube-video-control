@@ -1,5 +1,5 @@
 import { Component, VERSION } from '@angular/core';
- 
+
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
@@ -13,10 +13,10 @@ export class AppComponent {
   public video: any;
   public player: any;
   public reframed: boolean = false;
-   constructor() {}
+  constructor() {}
 
   ngOnInit() {
-     this.init();
+    this.init();
   }
 
   init() {
@@ -34,7 +34,6 @@ export class AppComponent {
   startVideo() {
     console.log('ingresa a startvideo');
     this.player = new window['YT'].Player('player', {
-     
       events: {
         onStateChange: this.onPlayerStateChange.bind(this),
         onError: this.onPlayerError.bind(this),
@@ -49,35 +48,35 @@ export class AppComponent {
     console.log(event.data);
     if (event.data === 1) {
       // Started playing
-      
+
       if (!this.timeSpent.length) {
         this.timeSpent = new Array(parseInt(this.player.getDuration()));
       }
-       
-     setInterval(() => {
+
+      setInterval(() => {
         this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
         this.showPercentage();
-      }, 100); 
+      }, 100);
     } else {
       clearInterval(this.timer);
     }
   }
- 
- 
+
   showPercentage() {
     //console.log(this.percent,' el porcentaje')
-        var percent = 0;
-
-     
-      for (var i = 0, l = this.timeSpent.length; i < l; i++) {
-        if (this.timeSpent[i])  percent++;
+    let percent = 0;
+    if (percent == 100) {
+      console.log('se acabó');
+      return false;
+    } else {
+      for (let i = 0, l = this.timeSpent.length; i < l; i++) {
+        if (this.timeSpent[i]) percent++;
       }
-      percent = Math.round(( percent / this.timeSpent.length) * 100);
-          this.display = percent + '%';
- 
-     
-          console.log(this.display )
+      percent = Math.round((percent / this.timeSpent.length) * 100);
+      this.display = percent + '%';
 
+      console.log(this.display);
+    }
   }
   cleanTime() {
     return Math.round(this.player.getCurrentTime());
