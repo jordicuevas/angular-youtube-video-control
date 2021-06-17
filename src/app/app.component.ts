@@ -57,9 +57,10 @@ export class AppComponent {
         this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
         this.showPercentage();
       }, 100);
-    } else {
-      clearInterval(this.timer);
-    }
+    } else if (event.data === 0) {
+           clearInterval(this.timer);
+           this.player.destroy()    
+  } 
   }
 
   showPercentage() {
