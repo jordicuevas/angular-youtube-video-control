@@ -1,5 +1,6 @@
 import { Component, VERSION } from '@angular/core';
-
+import { interval } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
@@ -13,22 +14,25 @@ export class AppComponent {
   public video: any;
   public player: any;
   public reframed: boolean = false;
-
+  percent = 0;
   constructor() {}
 
   ngOnInit() {
-    console.log('iniciando !');
     this.video = 'zCB8Z_fO2Yo';
-    this.init();
+    // this.init();
   }
 
   init() {
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/player_api';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    window['onYouTubeIframeAPIReady'] = () => this.startVideo();
-    this.startVideo();
+    if (window['YT']) {
+      this.startVideo();
+      return;
+    } else {
+      let tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/player_api';
+      let firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      window['onYouTubeIframeAPIReady'] = () => this.startVideo();
+    }
   }
   startVideo() {
     console.log('ingresa a startvideo');
@@ -53,36 +57,34 @@ export class AppComponent {
     });
   }
   onPlayerReady(event) {
-    console.log('ingresa al ready');
     event.target.playVideo();
   }
   onPlayerStateChange(event) {
-    console.log(event.data);
     if (event.data === 1) {
       // Started playing
       if (!this.timeSpent.length) {
         this.timeSpent = new Array(parseInt(this.player.getDuration()));
       }
-      setInterval(() => {
+      /*   setInterval(() => {
 this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
     this.showPercentage();
-      }, 100)
-       
+      }, 100)*/
+      interval(1000)
+        .pipe(takeWhile(() => this.percent == 100))
+        .subscribe(() => {
+          this.display = this.percent + '%';
+        });
     } else {
       clearInterval(this.timer);
     }
   }
-  record() {
-    
-  }
+  record() {}
 
   showPercentage() {
-    var percent = 0;
     for (var i = 0, l = this.timeSpent.length; i < l; i++) {
-      if (this.timeSpent[i]) percent++;
+      if (this.timeSpent[i]) this.percent++;
     }
-    percent = Math.round((percent / this.timeSpent.length) * 100);
-    this.display = percent + '%';
+    this.percent = Math.round((this.percent / this.timeSpent.length) * 100);
   }
   cleanTime() {
     return Math.round(this.player.getCurrentTime());
