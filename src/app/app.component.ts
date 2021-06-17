@@ -76,10 +76,10 @@ export class AppComponent {
         if (this.timeSpent[i]) percent++;
       }
       percent = Math.round((percent / this.timeSpent.length) * 100);
+
       this.display = percent + '%';
 
-      console.log(this.display);
-    }
+     }
   }
   cleanTime() {
     return Math.round(this.player.getCurrentTime());
