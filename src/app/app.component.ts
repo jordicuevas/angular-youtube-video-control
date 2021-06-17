@@ -14,12 +14,10 @@ export class AppComponent {
   public video: any;
   public player: any;
   public reframed: boolean = false;
-  percent = 0;
-  constructor() {}
+   constructor() {}
 
   ngOnInit() {
-    this.video = 'ASGgn8bNQuA';  
-    this.init();
+     this.init();
   }
 
   init() {
@@ -36,19 +34,8 @@ export class AppComponent {
   }
   startVideo() {
     console.log('ingresa a startvideo');
-    this.reframed = false;
     this.player = new window['YT'].Player('player', {
-      videoId: this.video,
-      playerVars: {
-        autoplay: 1,
-        modestbranding: 1,
-        controls: 1,
-        disablekb: 1,
-        rel: 0,
-        showinfo: 0,
-        fs: 0,
-        playsinline: 1
-      },
+     
       events: {
         onStateChange: this.onPlayerStateChange.bind(this),
         onError: this.onPlayerError.bind(this),
@@ -60,33 +47,43 @@ export class AppComponent {
     event.target.playVideo();
   }
   onPlayerStateChange(event) {
+    console.log(event.data);
     if (event.data === 1) {
       // Started playing
+      
       if (!this.timeSpent.length) {
         this.timeSpent = new Array(parseInt(this.player.getDuration()));
       }
-      if ( this.percent == 100) {
-        clearInterval(this.timer);
-      } else {
-    this.timer = setInterval(() => {
-this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
-    this.showPercentage();
-      }, 100) 
-      }
-     
        
+     this.timer = setInterval(() => {
+        this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
+        this.showPercentage();
+      }, 100); 
     } else {
       clearInterval(this.timer);
     }
   }
-  record() {}
-
+  record() {
+    
+    this.timeSpent[ parseInt(this.player.getCurrentTime()) ] = true;
+    this.showPercentage();
+}
+ 
   showPercentage() {
-    for (var i = 0, l = this.timeSpent.length; i < l; i++) {
-      if (this.timeSpent[i]) this.percent++;
+    //console.log(this.percent,' el porcentaje')
+        var percent = 0;
+
+    if ( percent == 100) {
+      clearInterval(this.timer);
+      return;
+    } else {
+      for (var i = 0, l = this.timeSpent.length; i < l; i++) {
+        if (this.timeSpent[i])  percent++;
+      }
+      percent = Math.round(( percent / this.timeSpent.length) * 100);
+      this.display = percent + '%';
+      console.log(this.display)
     }
-    this.percent = Math.round((this.percent / this.timeSpent.length) * 100);
-    this.display = this.percent + '%';
   }
   cleanTime() {
     return Math.round(this.player.getCurrentTime());
