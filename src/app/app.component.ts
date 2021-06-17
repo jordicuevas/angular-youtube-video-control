@@ -67,6 +67,8 @@ export class AppComponent {
     let percent = 0;
     if (percent == 100) {
       console.log('se acabó');
+      console.log('____________________________________________');
+
       clearInterval(this.timer);
       return false;
     } else {
