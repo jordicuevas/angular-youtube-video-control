@@ -1,6 +1,5 @@
 import { Component, VERSION } from '@angular/core';
-import { interval } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+ 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
@@ -9,7 +8,7 @@ import { takeWhile } from 'rxjs/operators';
 export class AppComponent {
   timer: any;
   timeSpent = [];
-  display: any;
+  display: string;
   public YT: any;
   public video: any;
   public player: any;
@@ -63,15 +62,11 @@ export class AppComponent {
       clearInterval(this.timer);
     }
   }
-  record() {
-    
-    this.timeSpent[ parseInt(this.player.getCurrentTime()) ] = true;
-    this.showPercentage();
-}
+ 
  
   showPercentage() {
     //console.log(this.percent,' el porcentaje')
-        var percent = 0;
+        let percent = 0;
 
     if ( percent == 100) {
       clearInterval(this.timer);
@@ -81,9 +76,11 @@ export class AppComponent {
         if (this.timeSpent[i])  percent++;
       }
       percent = Math.round(( percent / this.timeSpent.length) * 100);
-      this.display = percent + '%';
-      console.log(this.display)
+          this.display = percent + '%';
+ 
     }
+          // console.log(this.display )
+
   }
   cleanTime() {
     return Math.round(this.player.getCurrentTime());
