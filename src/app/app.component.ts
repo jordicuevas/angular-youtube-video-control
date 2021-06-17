@@ -18,8 +18,8 @@ export class AppComponent {
   constructor() {}
 
   ngOnInit() {
-    this.video = 'zCB8Z_fO2Yo';
-    // this.init();
+    this.video = 'ASGgn8bNQuA';  
+    this.init();
   }
 
   init() {
@@ -65,15 +65,16 @@ export class AppComponent {
       if (!this.timeSpent.length) {
         this.timeSpent = new Array(parseInt(this.player.getDuration()));
       }
-      /*   setInterval(() => {
+      if ( this.percent == 100) {
+        clearInterval(this.timer);
+      } else {
+    this.timer = setInterval(() => {
 this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
     this.showPercentage();
-      }, 100)*/
-      interval(1000)
-        .pipe(takeWhile(() => this.percent == 100))
-        .subscribe(() => {
-          this.display = this.percent + '%';
-        });
+      }, 100) 
+      }
+     
+       
     } else {
       clearInterval(this.timer);
     }
@@ -85,6 +86,7 @@ this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
       if (this.timeSpent[i]) this.percent++;
     }
     this.percent = Math.round((this.percent / this.timeSpent.length) * 100);
+    this.display = this.percent + '%';
   }
   cleanTime() {
     return Math.round(this.player.getCurrentTime());
