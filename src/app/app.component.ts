@@ -53,7 +53,7 @@ export class AppComponent {
         this.timeSpent = new Array(parseInt(this.player.getDuration()));
       }
 
-      setInterval(() => {
+     this.timer =  setInterval(() => {
         this.timeSpent[parseInt(this.player.getCurrentTime())] = true;
         this.showPercentage();
       }, 100);
@@ -67,6 +67,7 @@ export class AppComponent {
     let percent = 0;
     if (percent == 100) {
       console.log('se acabó');
+      clearInterval(this.timer)
       return false;
     } else {
       for (let i = 0, l = this.timeSpent.length; i < l; i++) {
